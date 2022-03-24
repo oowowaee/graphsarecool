@@ -5,13 +5,14 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   filename: 'index.html',
   inject: 'body'
 })
-module.exports = { 
-  mode: 'development',
+
+module.exports = {
+  mode: 'production',
   entry: './src/index.js', 
   output: { 
-    path: path.resolve('dist'), 
+    path: path.resolve(__dirname, './dist'),
     filename: 'index_bundle.js'
-  }, 
+  },
   module: { 
     rules: [ 
       { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ }

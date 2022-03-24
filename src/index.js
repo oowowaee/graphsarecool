@@ -8,10 +8,13 @@ import * as d3 from 'd3';
 // Add hover effects:
 // https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
 
+// Show value on hover
+// https://atdyer.github.io/d3-chart/examples/26.html
+
 // set the dimensions and margins of the graph
-const margin = {top: 30, right: 30, bottom: 150, left: 60},
+const margin = {top: 60, right: 30, bottom: 120, left: 60},
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 450 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3.select("#my_dataviz")
@@ -28,11 +31,12 @@ d3.csv("./data.csv").then( function(data) {
 
   svg.append("text")
     .attr("x", (width / 2))
-    .attr("y", 0 - (margin.top / 2))
+    .attr("y", 0 - (margin.top - 30))
     .attr("text-anchor", "middle")
     .style("font-size", "18px")
     .style("text-decoration", "underline")
-    .text("Awesome chart");
+    .style("padding-bottom", "10px")
+    .text("Total Sanctions by Country");
 
   // X axis
   const x = d3.scaleBand()
@@ -61,7 +65,27 @@ d3.csv("./data.csv").then( function(data) {
     .selectAll("text")
       .attr('font-weight', 'bold');
 
+      const tooltip = d3.select("body")
+        .append("div")
+        .attr("class","d3-tooltip")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .style("padding", "15px")
+        .style("background", "rgba(0,0,0,0.6)")
+        .style("border-radius", "5px")
+        .style("color", "#fff")
+        .text("a simple tooltip");
+
   // Bars
+  svg.selectAll("labels")
+    .data(data)
+    .join("text")
+    .attr("x", d => x(d.Country) + x.bandwidth() / 2 - (d.Value.toString().length * 3))
+    .attr("y", d => y(d.Value) - 5)
+    .style("font-size", "12px")
+    .text(d => d.Value)
+
   svg.selectAll("bar")
     .data(data)
     .join("rect")
@@ -71,7 +95,7 @@ d3.csv("./data.csv").then( function(data) {
       .attr("height", d => height - y(0))
       .attr("fill", (d, i) => colors(i))
       .attr("stroke", "black")
-      .attr("opacity", "0.8")
+      .attr("opacity", "0.75")
            //Our new hover effects
       .on('mouseover', function (d, i) {
           d3.select(this).transition()
@@ -81,7 +105,7 @@ d3.csv("./data.csv").then( function(data) {
       .on('mouseout', function (d, i) {
           d3.select(this).transition()
                .duration('50')
-               .attr('opacity', '.8');
+               .attr('opacity', '.75');
       })
 
   // Animation
