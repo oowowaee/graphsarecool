@@ -37,12 +37,23 @@ d3.csv("./data.csv").then( function(data) {
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end");
 
+
+  // This chooses a color based on the value
+  // var colors = d3.scaleQuantize()
+  //   .domain([0, 900])
+  //   .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598", 
+  //   "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
+
+  var colors = d3.scaleLinear().domain([0, data.length - 1]).range(["rgb(219, 219, 255)", "rgb(63, 63, 255)"])
+
   // Add Y axis
   const y = d3.scaleLinear()
     .domain([0, roundedMaxValue])
     .range([ height, 0]);
+
   svg.append("g")
     .call(d3.axisLeft(y));
+    // calling axisRight appends the labels to the right hand side
 
   // Bars
   svg.selectAll("bar")
@@ -51,7 +62,8 @@ d3.csv("./data.csv").then( function(data) {
       .attr("x", d => x(d.Country))
       .attr("y", d => y(d.Value))
       .attr("width", x.bandwidth())
-      .attr("height", d => height - y(d.Value) - 0.5)
-      .attr("fill", "#69b3a2")
+      .attr("height", d => height - y(d.Value))
+      .attr("fill", (d, i) => colors(i))
+      .attr("stroke", "black");
 
 })
