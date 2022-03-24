@@ -24,8 +24,19 @@ const svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
+const data = [
+  { 'Country': "Australia DFAT", 'Value': 478 },
+  { 'Country': "Canada SEMA", 'Value': 526 },
+  { 'Country': "EU Sanctions", 'Value': 705 },
+  { 'Country': "France Tresor Registre Des Gels", 'Value': 696 },
+  { 'Country': "Switzerland SECO", 'Value': 774 },
+  { 'Country': "UK HMT OFSI", 'Value': 801 },
+  { 'Country': "US OFAC Non-SDN", 'Value': 22 },
+  { 'Country': "US OFAC SDN", 'Value': 271 }
+]
+
 // Parse the Data
-d3.csv("./data.csv").then( function(data) {
+
   const maxValue = Math.max(...data.map(d => d.Value))
   const roundedMaxValue = Math.round(maxValue / 100) * 100 + 100
 
@@ -34,7 +45,6 @@ d3.csv("./data.csv").then( function(data) {
     .attr("y", 0 - (margin.top - 30))
     .attr("text-anchor", "middle")
     .style("font-size", "18px")
-    .style("text-decoration", "underline")
     .style("padding-bottom", "10px")
     .text("Total Sanctions by Country");
 
@@ -51,7 +61,8 @@ d3.csv("./data.csv").then( function(data) {
       .style("text-anchor", "end")
       .attr('font-weight', 'bold');
 
-  var colors = d3.scaleLinear().domain([0, data.length - 1]).range(["rgb(219, 219, 255)", "blue"])
+  var palettes = [["rgb(219, 219, 255)", "blue"], ["rgb(255, 219, 219)", "red"], ["pink", "purple"], ["yellow", "purple"], ["grey", "pink"]]
+  var colors = d3.scaleLinear().domain([0, data.length - 1]).range(palettes[Math.floor(Math.random() * palettes.length)])
 
   // Add Y axis
   const y = d3.scaleLinear()
@@ -110,7 +121,6 @@ d3.csv("./data.csv").then( function(data) {
     .attr("y", function(d) { return y(d.Value); })
     .attr("height", function(d) { return height - y(d.Value); })
     .delay(function(d,i){ return(i*100) })
-})
 
 
 
