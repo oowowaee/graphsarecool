@@ -6,8 +6,7 @@ import * as d3 from 'd3';
 // https://d3-graph-gallery.com/graph/barplot_basic.html
 
 // set the dimensions and margins of the graph
-// set the dimensions and margins of the graph
-const margin = {top: 30, right: 30, bottom: 70, left: 60},
+const margin = {top: 30, right: 30, bottom: 150, left: 60},
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
@@ -46,13 +45,13 @@ d3.csv("./data.csv").then( function(data) {
     .call(d3.axisLeft(y));
 
   // Bars
-  svg.selectAll("mybar")
+  svg.selectAll("bar")
     .data(data)
     .join("rect")
       .attr("x", d => x(d.Country))
       .attr("y", d => y(d.Value))
       .attr("width", x.bandwidth())
-      .attr("height", d => height - y(d.Value))
+      .attr("height", d => height - y(d.Value) - 0.5)
       .attr("fill", "#69b3a2")
 
 })
