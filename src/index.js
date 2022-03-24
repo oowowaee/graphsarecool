@@ -65,30 +65,21 @@ d3.csv("./data.csv").then( function(data) {
     .selectAll("text")
       .attr('font-weight', 'bold');
 
-      const tooltip = d3.select("body")
-        .append("div")
-        .attr("class","d3-tooltip")
-        .style("position", "absolute")
-        .style("z-index", "10")
-        .style("visibility", "hidden")
-        .style("padding", "15px")
-        .style("background", "rgba(0,0,0,0.6)")
-        .style("border-radius", "5px")
-        .style("color", "#fff")
-        .text("a simple tooltip");
+  var bars = svg.selectAll("bar")
+               .data(data)
+               .enter().append("g")
+               .attr("class", "barWithLabel");
 
   // Bars
-  svg.selectAll("labels")
-    .data(data)
-    .join("text")
+  bars.append("text")
     .attr("x", d => x(d.Country) + x.bandwidth() / 2 - (d.Value.toString().length * 3))
     .attr("y", d => y(d.Value) - 5)
+    .attr("class", "textLabel")
     .style("font-size", "12px")
+    .style("visibility", "hidden")
     .text(d => d.Value)
 
-  svg.selectAll("bar")
-    .data(data)
-    .join("rect")
+  bars.append("rect")
       .attr("x", d => x(d.Country))
       .attr("y", d => y(0))
       .attr("width", x.bandwidth())
@@ -101,11 +92,15 @@ d3.csv("./data.csv").then( function(data) {
           d3.select(this).transition()
                .duration('50')
                .attr('opacity', '1');
+
+          d3.select(this.parentNode).select('.textLabel').style("visibility", "visible");
       })
       .on('mouseout', function (d, i) {
           d3.select(this).transition()
                .duration('50')
                .attr('opacity', '.75');
+
+          d3.select(this.parentNode).select('.textLabel').style("visibility", "hidden");
       })
 
   // Animation
