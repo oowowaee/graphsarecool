@@ -41,10 +41,10 @@ d3.csv("./data.csv").then( function(data) {
   // This chooses a color based on the value
   // var colors = d3.scaleQuantize()
   //   .domain([0, 900])
-  //   .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598", 
+  //   .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
   //   "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
 
-  var colors = d3.scaleLinear().domain([0, data.length - 1]).range(["rgb(219, 219, 255)", "rgb(63, 63, 255)"])
+  var colors = d3.scaleLinear().domain([0, data.length - 1]).range(["rgb(219, 219, 255)", "blue"])
 
   // Add Y axis
   const y = d3.scaleLinear()
@@ -64,6 +64,17 @@ d3.csv("./data.csv").then( function(data) {
       .attr("width", x.bandwidth())
       .attr("height", d => height - y(d.Value))
       .attr("fill", (d, i) => colors(i))
-      .attr("stroke", "black");
-
+      .attr("stroke", "black")
+      .attr("opacity", "0.8")
+           //Our new hover effects
+      .on('mouseover', function (d, i) {
+          d3.select(this).transition()
+               .duration('50')
+               .attr('opacity', '1');
+      })
+      .on('mouseout', function (d, i) {
+          d3.select(this).transition()
+               .duration('50')
+               .attr('opacity', '.8');
+      })
 })
