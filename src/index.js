@@ -98,7 +98,38 @@ const data = [
       .attr("fill", (d, i) => colors(i))
       .attr("stroke", "black")
       .attr("opacity", "0.75")
-           //Our new hover effects
+
+const attachEvents = () => {
+  console.log('attaching')
+  svg.selectAll("rect")
+         //Our new hover effects
+  .on('mouseover', function (d, i) {
+      d3.select(this).transition()
+           .duration('50')
+           .attr('opacity', '1');
+
+      d3.select(this.parentNode).select('.textLabel').style("visibility", "visible");
+  })
+  .on('mouseout', function (d, i) {
+      d3.select(this).transition()
+           .duration('50')
+           .attr('opacity', '.75');
+
+      d3.select(this.parentNode).select('.textLabel').style("visibility", "hidden");
+  })
+}
+
+  // Animation
+  svg.selectAll("rect")
+    .transition()
+    .duration(600)
+    .attr("y", d => y(d.Value))
+    .attr("height", d => height - y(d.Value))
+    .delay((d,i) => i * 60)
+    .end()
+    .then(() => {
+      // Add hover effects only once loading animation finishes
+      svg.selectAll("rect")
       .on('mouseover', function (d, i) {
           d3.select(this).transition()
                .duration('50')
@@ -113,14 +144,7 @@ const data = [
 
           d3.select(this.parentNode).select('.textLabel').style("visibility", "hidden");
       })
-
-  // Animation
-  svg.selectAll("rect")
-    .transition()
-    .duration(800)
-    .attr("y", function(d) { return y(d.Value); })
-    .attr("height", function(d) { return height - y(d.Value); })
-    .delay(function(d,i){ return(i*100) })
+    })
 
 
 
