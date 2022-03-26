@@ -144,7 +144,49 @@ const data9 = {
   ]
 }
 
-const dataPoints = [data1, data2, data3, data4, data5, data6, data7, data8, data9]
+const data10 = {
+  date: '2022-03-03',
+  data: [
+    { 'Country': "Australia DFAT", 'Value': 37 + 347 + 17 + 5 + 7},
+    { 'Country': "Canada SEMA", 'Value': 416 + 18 },
+    { 'Country': "EU Sanctions", 'Value': 368 + 99 + 27 + 24 },
+    { 'Country': "France Tresor Registre Des Gels", 'Value': 5 + 361 + 97 + 27 + 22 },
+    { 'Country': "Switzerland SECO", 'Value': 368 + 3 },
+    { 'Country': "UK HMT OFSI", 'Value': 21 + 3 + 9 + 2 },
+    { 'Country': "US OFAC Non-SDN", 'Value': 22 },
+    { 'Country': "US OFAC SDN", 'Value': 125 + 4 + 92 }
+  ]
+}
+
+const data11 = {
+  date: '2022-03-04',
+  data: [
+    { 'Country': "Australia DFAT", 'Value': 37 + 347 + 17 + 5 + 7},
+    { 'Country': "Canada SEMA", 'Value': 416 + 18 + 20 },
+    { 'Country': "EU Sanctions", 'Value': 368 + 99 + 27 + 24 },
+    { 'Country': "France Tresor Registre Des Gels", 'Value': 5 + 361 + 97 + 27 + 22 + 1 },
+    { 'Country': "Switzerland SECO", 'Value': 368 + 3 + 197 },
+    { 'Country': "UK HMT OFSI", 'Value': 21 + 3 + 9 + 2 },
+    { 'Country': "US OFAC Non-SDN", 'Value': 22 },
+    { 'Country': "US OFAC SDN", 'Value': 125 + 4 + 92 }
+  ]
+}
+
+const data12 = {
+  date: '2022-03-07',
+  data: [
+    { 'Country': "Australia DFAT", 'Value': 37 + 347 + 17 + 5 + 7 + 17 },
+    { 'Country': "Canada SEMA", 'Value': 416 + 18 + 20 + 20 },
+    { 'Country': "EU Sanctions", 'Value': 368 + 99 + 27 + 24 },
+    { 'Country': "France Tresor Registre Des Gels", 'Value': 5 + 361 + 97 + 27 + 22 + 1 },
+    { 'Country': "Switzerland SECO", 'Value': 368 + 3 + 197 },
+    { 'Country': "UK HMT OFSI", 'Value': 21 + 3 + 9 + 2 },
+    { 'Country': "US OFAC Non-SDN", 'Value': 22 },
+    { 'Country': "US OFAC SDN", 'Value': 125 + 4 + 92 }
+  ]
+}
+
+const dataPoints = [data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12]
 
 // append the svg object to the body of the page
 const svg = d3.select("#graphOverTime")
@@ -214,6 +256,20 @@ const graphOverTime = () => {
         .attr("height", function(d) { return height - y(d.Value); })
       .attr("fill", (d, i) => colors(i))
 
+    // Attach the labels
+    var u2 = svg.selectAll("text.textLabel")
+                .data(currentData.data)
+
+    u2.enter()
+       .merge(u2)
+       .transition()
+       .duration(600)
+       .attr("x", d => x(d.Country) + x.bandwidth() / 2 - (d.Value.toString().length * 3))
+       .attr("y", d => y(d.Value) - 5)
+       .attr("class", "textLabel")
+       .style("font-size", "12px")
+       .text(d => d.Value)
+
     svg.select('text').text(`Sanctions imposed until ${currentData.date}`)
     index++
   }
@@ -233,6 +289,14 @@ const graphOverTime = () => {
       .attr("fill", (d, i) => colors(i))
       .attr("stroke", "black")
       .attr("opacity", "0.75")
+
+  // Attach the labels
+  bars.append("text")
+    .attr("x", d => x(d.Country) + x.bandwidth() / 2 - (d.Value.toString().length * 3))
+    .attr("y", d => y(d.Value) - 5)
+    .attr("class", "textLabel")
+    .style("font-size", "12px")
+    .text(d => d.Value)
 
   // Animate the bars on page load
   svg.selectAll("rect")
