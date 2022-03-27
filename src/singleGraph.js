@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { dataTotals as data } from './data.js'
 
 // Setup project:
 // https://code.likeagirl.io/how-to-set-up-d3-js-with-webpack-and-babel-7bd3f5e20df7
@@ -17,17 +18,6 @@ const margin = {top: 60, right: 30, bottom: 120, left: 60},
     height = 450 - margin.top - margin.bottom;
 
 const palettes = [["rgb(219, 219, 255)", "blue"], ["rgb(255, 219, 219)", "red"], ["pink", "purple"], ["yellow", "purple"], ["grey", "pink"]]
-
-const data = [
-  { 'Country': "Australia DFAT", 'Value': 478 },
-  { 'Country': "Canada SEMA", 'Value': 526 },
-  { 'Country': "EU Sanctions", 'Value': 705 },
-  { 'Country': "France Tresor Registre Des Gels", 'Value': 696 },
-  { 'Country': "Switzerland SECO", 'Value': 774 },
-  { 'Country': "UK HMT OFSI", 'Value': 801 },
-  { 'Country': "US OFAC Non-SDN", 'Value': 22 },
-  { 'Country': "US OFAC SDN", 'Value': 271 }
-]
 
 // append the svg object to the body of the page
 const svg = d3.select("#singleGraph")
