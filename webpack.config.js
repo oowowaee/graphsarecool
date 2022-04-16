@@ -15,6 +15,9 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     filename: 'index_bundle.js'
   },
+  performance: {
+    hints: false
+  },
   module: { 
     rules: [ 
       { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ }

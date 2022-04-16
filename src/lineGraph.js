@@ -37,17 +37,17 @@ const lineGraph = () => {
     .text('Total Russia Sanctions');
 
   // X axis
-  const x = d3.scaleBand()
-    .range([0, width])
-    .domain(dataPoints.map(d => d.date))
+  // const x = d3.scaleBand()
+  //   .range([0, width])
+  //   .domain(dataPoints.map(d => d.date))
 
-  svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end")
-      .attr('font-weight', 'bold');
+  // svg.append("g")
+  //   .attr("transform", `translate(0, ${height})`)
+  //   .call(d3.axisBottom(x))
+  //   .selectAll("text")
+  //     .attr("transform", "translate(-10,0)rotate(-45)")
+  //     .style("text-anchor", "end")
+  //     .attr('font-weight', 'bold');
 
   // Add Y axis
   const y = d3.scaleLinear()
@@ -61,23 +61,38 @@ const lineGraph = () => {
     .selectAll("text")
       .attr('font-weight', 'bold');
 
-  const lines = dataPoints.map(d => {
-
-  })
-
   const dataBySource = {}
+  const dates = []
 
   dataPoints.forEach(d => {
     d.data.forEach(object => {
       if (dataBySource[object.Country] !== undefined) {
-        dataBySource[object.Country].push({ date: d.date, value: object.Value })
+        dataBySource[object.Country].push({ date: new Date(d.date), value: object.Value })
       } else {
-        dataBySource[object.Country] = [{ date: d.date, value: object.Value }]
+        dataBySource[object.Country] = [{ date: new Date(d.date), value: object.Value }]
+      }
+
+      if (dates.indexOf(d.date) === -1) {
+        dates.push(d.date)
       }
     })
   })
 
+  const timestamps = dates.map(date => new Date(date))
+  console.log(timestamps)
   const keys = Object.keys(dataBySource)
+
+  const x = d3.scaleUtc()
+    .domain([timestamps[0], timestamps[17]])
+    .range([ 0, width ])
+
+  svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%d/%m')).ticks(timestamps.length + 2))
+    .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end")
+      .attr('font-weight', 'bold');
 
   keys.forEach(key => {
     let group = svg.append('g')
@@ -96,7 +111,7 @@ const lineGraph = () => {
           )
       .on('mouseover', function (d, i) {
         d3.select(this.parentNode).select('.line')
-          .attr('opacity', '1')
+          .style('opacity', '1')
           .style('stroke-width', 3);
 
           d3.select(this.parentNode).select('.icon').style("opacity", "1");
@@ -104,7 +119,7 @@ const lineGraph = () => {
       })
       .on('mouseout', function (d, i) {
         d3.select(this.parentNode).select('.line')
-          .attr('opacity', '0.6')
+          .style('opacity', '0.6')
           .style('stroke-width', 2);
 
           d3.select(this.parentNode).select('.icon').style("opacity", "0.75");
@@ -127,7 +142,7 @@ const lineGraph = () => {
          .attr("stroke", "black")
          .attr("class", "icon")
          .style("fill", colors(keys.indexOf(key)))
-         .attr("x", width)
+         .attr("x", width + 15)
          .attr("y", y(keys.indexOf(key) * 100 + 130))
          .attr("height", 10)
          .attr("width", 10)
@@ -135,7 +150,7 @@ const lineGraph = () => {
 
     labelGoup.append("text")
         .attr("class", "labelText")
-        .attr("x", width + 15)
+        .attr("x", width + 35)
         .attr("y", y(keys.indexOf(key) * 100 + 100))
         .attr("text-anchor", "start")
         .style("fill", "black")
