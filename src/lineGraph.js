@@ -79,7 +79,6 @@ const lineGraph = () => {
   })
 
   const timestamps = dates.map(date => new Date(date))
-  console.log(timestamps)
   const keys = Object.keys(dataBySource)
 
   const x = d3.scaleUtc()
@@ -88,7 +87,7 @@ const lineGraph = () => {
 
   svg.append("g")
     .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%d/%m')).ticks(timestamps.length + 2))
+    .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%d/%m')).ticks(timestamps.length))
     .selectAll("text")
       .attr("transform", "rotate(-45)")
       .style("text-anchor", "end")
@@ -105,7 +104,6 @@ const lineGraph = () => {
           .attr("stroke-width", 2)
           .attr("opacity", '0.6')
           .attr("d", d3.line()
-                       .curve(d3.curveBasis)
                        .x(d => x(d.date))
                        .y(d => y(d.value))
           )
