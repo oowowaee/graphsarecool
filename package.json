@@ -14,6 +14,7 @@
   },
   "scripts": {
     "build": "babel src --out-dir lib",
+    "build-assets": "webpack",
     "start": "webpack-dev-server"
   },
   "devDependencies": {

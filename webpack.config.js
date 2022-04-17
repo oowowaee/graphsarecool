@@ -6,14 +6,13 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: 'body'
 })
 
-//  mode: 'production',
-
 module.exports = {
   mode: 'production',
   entry: './src/index.js', 
   output: { 
-    path: path.resolve(__dirname, './dist'),
-    filename: 'index_bundle.js'
+    path: path.resolve(__dirname, './docs'),
+    filename: '[name].bundle.js',
+    clean: true
   },
   performance: {
     hints: false
